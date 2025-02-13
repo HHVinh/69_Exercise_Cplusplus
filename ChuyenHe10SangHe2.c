@@ -24,7 +24,7 @@ void he10SangHe2(unsigned int num) {
 
 int main() {
     unsigned int num;
-    printf("Hãy nhập một số nguyên bất kì từ 0 đến 255): ");
+    printf("Hãy nhập một số nguyên bất kì từ 0 đến 255: ");
     scanf("%u", &num);
     if (num > 255) {
         printf("Bạn đã nhập dữ liệu sai.\n");

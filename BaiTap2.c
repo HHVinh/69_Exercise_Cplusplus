@@ -1,7 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 
 // Hàm chuyển mảng 8 phần tử (0,1) thành số nguyên
-int chuyenThanhSoNguyen(int A[8]) {
+int chuyenThanhSoNguyen8Bit(int A[8]) {
     int x = 0;
     for (int i = 0; i < 8; i++) {  // Duyệt từ A[1] đến A[8]
         x = (x << 1) | A[i];
@@ -13,21 +14,90 @@ int chuyenThanhSoNguyen(int A[8]) {
     }
     return x;
 }
+int chuyenThanhSoNguyen16Bit(int A[16]) {
+    int x = 0;
+    for (int i = 0; i < 16; i++) {
+        x = (x << 1) | A[i];
+    }
+    
+    //Nếu số âm (bit dấu A[1] == 1), chuyển về giá trị bù hai
+    if (A[0] == 1) {
+        x -= (1 << 16);  // Trừ 256 để chuyển thành số âm
+    }
+    return x;
+}
 
-// Hàm nhập 8 bit từ người dùng
-void nhapBit(int A[8]) {
-    int i = 0;
-    while (i < 8) {  
-        // Kiểm tra nhập 1 chữ số (0 hoặc 1)
-        if (scanf("%1d", &A[i]) != 1 || (A[i] != 0 && A[i] != 1)) {
-            printf("Lỗi: Chỉ được nhập 0 hoặc 1. Hãy nhập lại từ đầu!\n");
-            while (getchar() != '\n'); // Xóa bộ nhớ đệm tránh lỗi lặp vô hạn
-            i = 0;
-        } else {
-            i++; // Chỉ tăng nếu nhập đúng
+// Hàm nhập 8 bit
+/*void nhapBit(int A[8]) {
+    char chuoiBanDau[20]; // Chuỗi nhập tạm ban đầu
+    printf("gồm số 0 hoặc 1 (tối đa 8 số): ");
+    scanf("%s", chuoiBanDau);
+    int lenChuoiBanDau = strlen(chuoiBanDau);
+    if(lenChuoiBanDau > 8) {
+        printf("Lỗi: Bạn đã nhập quá 8 ký tự!\n");
+    }
+    int kiemTra = 1;
+    for(int i = 0; i < lenChuoiBanDau; i++) {
+        if(chuoiBanDau[i] != '0' && chuoiBanDau[i] != '1') {
+            kiemTra = 0;  // Nếu có ký tự sai, đặt lại cờ
+            printf("Lỗi: Chỉ được nhập 0 hoặc 1. Hãy nhập lại!\n");
+            while (getchar() != '\n');  // Xóa bộ nhớ đệm
+            break;
         }
     }
+    if(kiemTra) {
+        int so0ConThieu = 8 - lenChuoiBanDau;
+
+        for(int i = 0; i < so0ConThieu; i ++) {
+            A[i] = 0;
+        }
+
+        for(int i = 0; i < lenChuoiBanDau; i++) {
+            A[i + so0ConThieu] = chuoiBanDau[i] - '0';
+        }
+    }
+}*/
+void nhapBit(int A[8]) {
+    char chuoiBanDau[20]; // Chuỗi nhập tạm ban đầu
+    int kiemTra = 0;  // Cờ kiểm tra dữ liệu nhập
+
+    while (kiemTra == 0) {
+        printf("gồm số 0 hoặc 1 (tối đa 8 số): ");
+        scanf("%s", chuoiBanDau);
+        
+        int lenChuoiBanDau = strlen(chuoiBanDau);
+        
+        // Kiểm tra nếu nhập quá 8 ký tự
+        if (lenChuoiBanDau > 8) {
+            printf("\nLỗi: Bạn đã nhập quá 8 ký tự!\nNhập lại ");
+            continue;  // Yêu cầu nhập lại
+        }
+        
+        // Kiểm tra nếu có ký tự khác ngoài '0' hoặc '1'
+        kiemTra = 1;  // Giả định đầu vào đúng
+        for (int i = 0; i < lenChuoiBanDau; i++) {
+            if (chuoiBanDau[i] != '0' && chuoiBanDau[i] != '1') {
+                kiemTra = 0;  // Nếu có ký tự sai, đặt lại cờ
+                printf("\nLỗi: Chỉ được nhập 0 hoặc 1!\nNhập lại ");
+                while (getchar() != '\n');  // Xóa bộ nhớ đệm
+                break;  // Thoát khỏi vòng lặp kiểm tra và yêu cầu nhập lại
+            }
+        }
+    }
+
+    // Khi nhập hợp lệ, chuyển chuỗi thành mảng 8 bit
+    int lenChuoiBanDau = strlen(chuoiBanDau);
+    int so0ConThieu = 8 - lenChuoiBanDau;
+
+    for (int i = 0; i < so0ConThieu; i++) {
+        A[i] = 0;  // Điền 0 vào đầu dãy nếu nhập thiếu
+    }
+
+    for (int i = 0; i < lenChuoiBanDau; i++) {
+        A[i + so0ConThieu] = chuoiBanDau[i] - '0';  // Chuyển ký tự thành số 0 hoặc 1
+    }
 }
+
 
 // Hàm xuất 8 bit
 void xuatBit(int A[8]) {
@@ -52,11 +122,14 @@ void cong2DayBit(int A[8], int B[8], int KQ[9]) {
     if ((A[0] == B[0]) && (A[0] != KQ[1])) {
         printf("\nCảnh báo: Tràn số phép cộng!\n");
     }
-    printf("Kết quả cộng: (%d) + (%d)", chuyenThanhSoNguyen(A),chuyenThanhSoNguyen(B));
-    printf(" = %d\n", chuyenThanhSoNguyen(KQ + 1));
+    printf("Kết quả cộng: (%d) + (%d)", chuyenThanhSoNguyen8Bit(A),chuyenThanhSoNguyen8Bit(B));
+    printf(" = %d ", chuyenThanhSoNguyen8Bit(KQ + 1));
+    printf(", dãy nhị phân: ");
+    xuatBit(KQ +1);
 }
+
 // Hàm chuyển B thành -B (đảo bit + 1)
-void chuyenThanhBuHai(int B[8], int KQ[8]) {
+void chuyenThanhBu2(int B[8], int KQ[8]) {
     int bitNho = 1;
     // Bước 1: Đảo bit (XOR với 1)
     for (int i = 0; i < 8; i++) {
@@ -73,7 +146,7 @@ void chuyenThanhBuHai(int B[8], int KQ[8]) {
 
 // Hàm trừ 2 dãy 8 bit
 void tru2DayBit(int A[8], int B[8], int truB[8], int KQ[9]) {
-    chuyenThanhBuHai(B,truB);
+    chuyenThanhBu2(B,truB);
     int bitNho = 0;
     for(int i = 7; i >=0; i--) {
         int tong = A[i] + truB[i] + bitNho;
@@ -87,30 +160,133 @@ void tru2DayBit(int A[8], int B[8], int truB[8], int KQ[9]) {
         (A[0] == 1 && B[0] == 0 && KQ[1] == 0)) {
         printf("\nCảnh báo: Tràn số phép trừ!\n");
     }
-    printf("Kết quả trừ: (%d) - (%d)", chuyenThanhSoNguyen(A),chuyenThanhSoNguyen(B));
-    printf(" = %d\n", chuyenThanhSoNguyen(KQ + 1));
+    printf("Kết quả trừ: (%d) - (%d)", chuyenThanhSoNguyen8Bit(A),chuyenThanhSoNguyen8Bit(B));
+    printf(" = %d ", chuyenThanhSoNguyen8Bit(KQ + 1));
+    printf(", dãy nhị phân: ");
+    xuatBit(KQ +1);
 }
 
+// Hàm dịch phải CDQ
+void dichPhai(int C[1], int D[8], int Q[8]) {
+    for (int i = 7; i > 0; i--) {
+        Q[i] = Q[i - 1];
+    }
+    Q[0] = D[7];
+
+    for (int i = 7; i > 0; i--) {
+        D[i] = D[i - 1];
+    }
+    D[0] = C[0];
+
+    C[0] = 0;
+}
+
+// Hàm nhân 2 dãy 8 bit
+void nhan2DayBit(int M[8], int Q[8],int KQ[17]) {
+    int C = 0;       // Bit C khởi tạo bằng 0
+    int D[8] = {0};  // Dãy D khởi tạo bằng 0
+    int k = 8;       // Số bit của Q
+    int dauA = M[0]; int dauB = Q[0];
+    int banDauM[8]; int banDauQ[8];
+    memcpy(banDauM, M, 8 * sizeof(int));
+    memcpy(banDauQ, Q, 8 * sizeof(int));
+    int truM[8], truQ[8];
+    
+    if(M[0] == 1) {
+        chuyenThanhBu2(M,truM);
+        for(int i = 0; i < 8; i++) {
+            M[i] = truM[i];
+        }
+    }
+    if(Q[0] == 1) {
+        chuyenThanhBu2(Q,truQ);
+        for(int i = 0; i < 8; i++) {
+            Q[i] = truQ[i];
+        }
+    }
+
+    // Khởi tạo KQ = 0
+    memset(KQ, 0, 17 * sizeof(int));
+
+    while (k > 0) {
+
+        if (Q[7] == 1) {  
+            // Cộng D + M
+            int bitNho = 0;
+            for (int i = 7; i >= 0; i--) {
+                int tong = D[i] + M[i] + bitNho;
+                D[i] = tong % 2;  
+                bitNho = tong / 2;
+            }
+            C = bitNho;  // Cập nhật bit nhớ vào C
+        }
+
+        // Dịch phải C, D, Q
+        for (int i = 7; i > 0; i--) {
+            Q[i] = Q[i - 1];
+        }
+        Q[0] = D[7];
+
+        for (int i = 7; i > 0; i--) {
+            D[i] = D[i - 1];
+        }
+        D[0] = C;
+
+        C = 0;  // Reset bit C sau khi dịch
+        k--;
+    }
+
+    // Ghép kết quả vào KQ (C D Q)
+    KQ[0] = C;
+    for (int i = 0; i < 8; i++) {
+        KQ[i + 1] = D[i];
+        KQ[i + 9] = Q[i];
+    }
+    if( dauA != dauB) {
+        for(int i = 0; i < 17; i++) {
+            KQ[i] = KQ[i] ^ 1;
+        }
+        int bitNho = 1;
+        for(int i = 16; i >= 0; i--) {
+            int tong = KQ[i] + bitNho;
+            KQ[i] = tong % 2;
+            bitNho = tong / 2;
+        }
+    }
+    // In kết quả
+    printf("Kết quả nhân: (%d) * (%d)", chuyenThanhSoNguyen8Bit(banDauM),chuyenThanhSoNguyen8Bit(banDauQ));
+    printf(" = %d ", chuyenThanhSoNguyen16Bit(KQ + 1));
+    printf(", dãy nhị phân: ");
+    for (int i = 1; i < 17; i++) {
+        printf("%d", KQ[i]);
+        if(i % 4 == 0) {
+            printf(" ");
+        }
+    }
+}
+
+// Hàm chính
 int main() {
-    int A[8], B[8], truB[8], KQ_cong[9], KQ_tru[9];
+    int A[8], B[8], truB[8], KQ_cong[9], KQ_tru[9], KQ_nhan[17];
 
     // Nhập dữ liệu
-    printf("\nNhập 8 bit dãy số 1 (chỉ gồm 0 hoặc 1): ");
+    printf("\nNhập dãy bit 1, ");
     nhapBit(A);
-    printf("\nNhập 8 bit dãy số 2 (chỉ gồm 0 hoặc 1): ");
+    printf("\nNhập dãy bit 2, ");
     nhapBit(B);
     printf("\n");
     
-    // Thực hiện phép cộng
-    cong2DayBit(A, B, KQ_cong);
-    // printf("Kết quả cộng: %d + %d", chuyenThanhSoNguyen(A),chuyenThanhSoNguyen(B));
-    // printf("\nSố nguyên: %d\n", chuyenThanhSoNguyen(KQ_cong + 1));
-    printf("\n");
-    // Thực hiện phép trừ
-    tru2DayBit(A, B, truB, KQ_tru);
-    // printf("Kết quả trừ: %d - %d", chuyenThanhSoNguyen(A),chuyenThanhSoNguyen(B));
-    // printf("\nSố nguyên: %d\n", chuyenThanhSoNguyen(KQ_tru + 1));
+   // Phép cộng
+   cong2DayBit(A, B, KQ_cong);
+   printf("\n");
 
-    return 0;
+   // Phép trừ
+   tru2DayBit(A, B, truB, KQ_tru);
+   printf("\n");
+
+   // Phép nhân
+   nhan2DayBit(A, B, KQ_nhan);
+
+   return 0;
 }
 

@@ -1,23 +1,35 @@
 #include <stdio.h>
-
-// Hàm in số nguyên 4 byte dưới dạng nhị phân
-void docSoNhiPhan(int x) {
-    for (int i = 31; i >= 0; i--) {
-        printf("%d", (x >> i) & 1);
-        if (i % 8 == 0) printf(" ");  // Cách mỗi 8 bit để dễ đọc
+void he10SangHe2(unsigned int num) {
+    unsigned int count = 8;
+    unsigned int he2[count];
+    // Khởi tạo mảng với giá trị 0
+    for (int i = 0; i < count; i++) {
+        he2[i] = 0;
+    }
+    // Chuyển từ thập phân sang nhị phân
+    for (int i = count - 1; i >= 0; i--) {
+        he2[i] = num % 2;
+        num = num / 2;
+    }
+    // In kết quả dãy nhị phân, cách nhau 4 bit
+    printf("Dãy nhị phân là: ");
+    for (int i = 0; i < count; i++) {
+        printf("%d", he2[i]);
+        if ((i + 1) % 4 == 0 && i < count - 1) {
+            printf(" ");
+        }
     }
     printf("\n");
 }
 
 int main() {
-    int num;
-
-    printf("Hãy nhập một số nguyên bất kỳ (-2,147,483,648 đến 2,147,483,647): ");
-    scanf("%d", &num);
-
-    printf("Dạng nhị phân của %d là: \n", num);
-    docSoNhiPhan(num);
-
+    unsigned int num;
+    printf("Hãy nhập một số nguyên bất kì từ 0 đến 255: ");
+    scanf("%u", &num);
+    if (num > 255) {
+        printf("Bạn đã nhập dữ liệu sai.\n");
+        return 1;
+    }
+    he10SangHe2(num);
     return 0;
 }
-
