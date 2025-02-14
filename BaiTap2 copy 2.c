@@ -14,8 +14,6 @@ int chuyenThanhSoNguyen8Bit(int A[8]) {
     }
     return x;
 }
-
-// Hàm chuyển mảng 8 phần tử (0,1) thành số nguyên
 int chuyenThanhSoNguyen16Bit(int A[16]) {
     int x = 0;
     for (int i = 0; i < 16; i++) {
@@ -70,6 +68,7 @@ void nhapBit(int A[8]) {
         A[i + so0ConThieu] = chuoiBanDau[i] - '0';  // Chuyển ký tự thành số 0 hoặc 1
     }
 }
+
 
 // Hàm xuất 8 bit
 void xuatBit(int A[8]) {
@@ -138,7 +137,7 @@ void tru2DayBit(int A[8], int B[8], int truB[8], int KQ[9]) {
     xuatBit(KQ +1);
 }
 
-// Hàm dịch phải cho phép nhân
+// Hàm dịch phải CDQ
 void dichPhai(int C[1], int D[8], int Q[8]) {
     for (int i = 7; i > 0; i--) {
         Q[i] = Q[i - 1];
@@ -153,24 +152,11 @@ void dichPhai(int C[1], int D[8], int Q[8]) {
     C[0] = 0;
 }
 
-// Hàm dịch trái cho phép chia
-void dichTrai(int D[8], int Q[8]) {
-    for (int i = 0; i <7; i++) {
-        D[i] = D[i + 1];
-    }
-    D[7] = Q[1];
-
-    for (int i = 0; i <7; i++) {
-        Q[i] = Q[i + 1];
-    }
-    Q[7] = 0;
-}
-
 // Hàm nhân 2 dãy 8 bit
 void nhan2DayBit(int M[8], int Q[8],int KQ[17]) {
-    int C = 0;       
-    int D[8] = {0}; 
-    int k = 8;
+    int C = 0;       // Bit C khởi tạo bằng 0
+    int D[8] = {0};  // Dãy D khởi tạo bằng 0
+    int k = 8;       // Số bit của Q
     int dauA = M[0]; int dauB = Q[0];
     int banDauM[8]; int banDauQ[8];
     memcpy(banDauM, M, 8 * sizeof(int));
@@ -250,98 +236,9 @@ void nhan2DayBit(int M[8], int Q[8],int KQ[17]) {
     }
 }
 
-void chia2DayBit(int M[8], int Q[8], int KQ[8]) {
-    int k = 8;          
-    int D[8] = {0};      
-    int truM[8];        
-    int KQCong[9];
-    int dauA = M[0]; int dauB = Q[0];
-    int banDauM[8]; int banDauQ[8];
-    memcpy(banDauM, M, 8 * sizeof(int));
-    memcpy(banDauQ, Q, 8 * sizeof(int));
-
-    chuyenThanhBu2(M, truM);  // Tính bù 2 của M để thực hiện phép trừ
-    
-    while (k > 0) {
-        // Bước 1: Dịch trái D và Q
-        dichTrai(D, Q);
-
-        // Bước 2: Cộng D + (-M) (Tức là D - M)
-        int bitNho = 0;
-        for (int i = 7; i >= 0; i--) {
-            int tong = D[i] + truM[i] + bitNho;
-            KQCong[i + 1] = tong % 2;  // Lưu từ KQCong[1] đến KQCong[8]
-            bitNho = tong / 2;
-        }
-        KQCong[0] = bitNho;  // Lưu bit dấu
-
-        // Bước 3: Kiểm tra dấu của KQCong
-        if (KQCong[0] == 1) {  // Nếu KQCong < 0 (bit dấu là 1)
-            Q[7] = 0;  // QK = 0
-        } else {  // Nếu KQCong >= 0 (bit dấu là 0)
-            Q[7] = 1;  // QK = 1
-            // Gán D = KQCong để cập nhật giá trị D
-            for (int i = 0; i < 8; i++) {
-                D[i] = KQCong[i + 1];
-            }
-        }
-
-        k--;  // Giảm số bit còn lại
-    }
-
-    // Lưu kết quả vào QK (sao chép từ Q)
-    for (int i = 0; i < 8; i++) {
-        KQ[i] = Q[i];
-    }
-
-    // Kiểm tra tràn số
-    if(dauA != dauB) {
-        for(int i = 0; i < 8; i++) {
-            KQ[i] = KQ[i] ^ 1;
-        }
-        int bitNho = 1;
-        for(int i = 7; i >= 0; i--) {
-            int tong = KQ[i] + bitNho;
-            KQ[i] = tong % 2;
-            bitNho = tong / 2;
-        }
-    }
-    if(dauA == 1) {
-        for(int i = 0; i < 8; i++) {
-            D[i] = D[i] ^ 1;
-        }
-        int bitNho = 1;
-        for(int i = 7; i >= 0; i--) {
-            int tong = D[i] + bitNho;
-            D[i] = tong % 2;
-            bitNho = tong / 2;
-        }
-    }
-
-    // In kết quả
-    printf("Kết quả chia: (%d) : (%d)", chuyenThanhSoNguyen8Bit(banDauM),chuyenThanhSoNguyen8Bit(banDauQ));
-    printf(" = %d ", chuyenThanhSoNguyen8Bit(KQ + 1));
-    printf(", dãy nhị phân: ");
-    for (int i = 1; i < 8; i++) {
-        printf("%d", KQ[i]);
-        if(i % 4 == 0) {
-            printf(" ");
-        }
-    }
-    printf(" dư %d ", chuyenThanhSoNguyen8Bit(D));
-    printf(", dãy nhị phân: ");
-    for (int i = 1; i < 8; i++) {
-        printf("%d", D[i]);
-        if(i % 4 == 0) {
-            printf(" ");
-        }
-    }
-}
-
-
 // Hàm chính
 int main() {
-    int A[8], B[8], truB[8], KQ_cong[9], KQ_tru[9], KQ_nhan[17], KQ_chia[8];
+    int A[8], B[8], truB[8], KQ_cong[9], KQ_tru[9], KQ_nhan[17];
 
     // Nhập dữ liệu
     printf("\nNhập dãy bit 1, ");
@@ -360,11 +257,7 @@ int main() {
 
    // Phép nhân
    nhan2DayBit(A, B, KQ_nhan);
-   printf("\n");
 
-   // Phép chia
-   chia2DayBit(A, B, KQ_chia);
-   printf("\n");
    return 0;
 }
 
