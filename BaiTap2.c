@@ -14,7 +14,6 @@ int chuyenThanhSoNguyen8Bit(int A[8]) {
     }
     return x;
 }
-
 // Hàm chuyển mảng 8 phần tử (0,1) thành số nguyên
 int chuyenThanhSoNguyen16Bit(int A[16]) {
     int x = 0;
@@ -28,7 +27,6 @@ int chuyenThanhSoNguyen16Bit(int A[16]) {
     }
     return x;
 }
-
 // Hàm nhập 8 bit
 void nhapBit(int A[8]) {
     char chuoiBanDau[20]; // Chuỗi nhập tạm ban đầu
@@ -70,7 +68,6 @@ void nhapBit(int A[8]) {
         A[i + so0ConThieu] = chuoiBanDau[i] - '0';  // Chuyển ký tự thành số 0 hoặc 1
     }
 }
-
 // Hàm xuất 8 bit
 void xuatBit(int A[8]) {
     for (int i = 0; i < 8; i++) {
@@ -79,7 +76,6 @@ void xuatBit(int A[8]) {
     }
     printf("\n");
 }
-
 // Hàm cộng 2 dãy 8 bit
 void cong2DayBit(int A[8], int B[8], int KQ[9]) {
     int bitNho = 0;
@@ -99,7 +95,6 @@ void cong2DayBit(int A[8], int B[8], int KQ[9]) {
     printf(", dãy nhị phân: ");
     xuatBit(KQ +1);
 }
-
 // Hàm chuyển B thành -B (đảo bit + 1)
 void chuyenThanhBu2(int B[8], int KQ[8]) {
     int bitNho = 1;
@@ -115,7 +110,6 @@ void chuyenThanhBu2(int B[8], int KQ[8]) {
         bitNho = tong / 2;  // Cập nhật bit nhớ
     }
 }
-
 // Hàm trừ 2 dãy 8 bit
 void tru2DayBit(int A[8], int B[8], int truB[8], int KQ[9]) {
     chuyenThanhBu2(B,truB);
@@ -137,7 +131,6 @@ void tru2DayBit(int A[8], int B[8], int truB[8], int KQ[9]) {
     printf(", dãy nhị phân: ");
     xuatBit(KQ +1);
 }
-
 // Hàm dịch phải cho phép nhân
 void dichPhai(int C[1], int D[8], int Q[8]) {
     for (int i = 7; i > 0; i--) {
@@ -152,7 +145,6 @@ void dichPhai(int C[1], int D[8], int Q[8]) {
 
     C[0] = 0;
 }
-
 // Hàm dịch trái cho phép chia
 void dichTrai(int D[8], int Q[8]) {
     int bitDauD = D[0];  // Lưu bit dấu ban đầu của D
@@ -169,7 +161,6 @@ void dichTrai(int D[8], int Q[8]) {
 
     D[0] = bitDauD;  // Giữ nguyên bit dấu của D
 }
-
 // Hàm nhân 2 dãy 8 bit
 void nhan2DayBit(int M[8], int Q[8],int KQ[17]) {
     int C = 0;       
@@ -254,7 +245,6 @@ void nhan2DayBit(int M[8], int Q[8],int KQ[17]) {
     }
     printf("\n");
 }
-
 // Hàm chia 2 dãy 8 bit
 void chia2DayBit(int Q[8], int M[8], int KQ[8]) {
     int k = 8;
@@ -335,9 +325,6 @@ void chia2DayBit(int Q[8], int M[8], int KQ[8]) {
     }
     printf("\n");
 }
-
-
-
 // Hàm chính
 int main() {
     int A[8], B[8], truB[8], KQ_cong[9], KQ_tru[9], KQ_nhan[17], KQ_chia[8];
