@@ -11,7 +11,7 @@ int main() {
     printf("Ban đầu: float = %f\n", f1);
     printf("Ép sang int: %d\n", i1);
     printf("Ép ngược lại float: %f\n", f2);
-    printf("Kết quả không như ban đầu vì phần thập phân bị mất khi ép sang int.\n");
+    printf("Kết quả không như ban đầu vì phần thập phân bị mất khi ép kiểu sang int.\n");
 
     printf("\n---------------------------------------------------------------------------------------------\n");
 
@@ -42,52 +42,63 @@ int main() {
     printf("\n---------------------------------------------------------------------------------------------\n");
 
     printf("\nCâu 4 i = (int) (3.14159 * f)\n");
-    printf("Trước khi ép kiểu: 3.14159 * f = %f\n", 3.14159 * f);
+    int i4 = i; float f4 = f;
+    printf("Trước khi ép kiểu: f = %f, 3.14159 * f = %f\n", f4, 3.14159 * f4);
     printf("Ép kiểu: ");
-    i = (int) (3.14159 * f);
-    printf("i = (int) (3.14159 * f) = %d\n", i);
+    i4 = (int) (3.14159 * f4);
+    printf("i = (int) (3.14159 * f) = %d\n", i4);
     printf("Khi ép kiểu float -> int, phần thập phân bị cắt bỏ chứ không làm tròn.\n");
 
     printf("\n---------------------------------------------------------------------------------------------\n");
     
     printf("\nCâu 5 f = f + (float) i\n");
-    printf("Trước khi ép kiểu: f = %f, i = %d", f, i);
-    printf(", f * i = %f\n", f * i);
+    int i5 = i; float f5 = f;
+    printf("Trước khi ép kiểu: f = %f, i = %d", f5, i5);
+    printf(", f + i = %f\n", f5 + i5);
     printf("Ép kiểu: ");
-    f = f + (float) i;
-    printf("f = f + (float) i = %f\n", f);
-    printf("Bài học: Khi cộng int với float, int sẽ được chuyển thành float trước khi tính toán.\n");
+    f5 = f5 + (float) i5;
+    printf("f = f + (float) i = %f\n", f5);
+    printf("Khi cộng int với float, int sẽ được chuyển thành float trước khi tính toán.\n");
 
     printf("\n---------------------------------------------------------------------------------------------\n");
 
     printf("\nCâu 6 if (i == (int)((float) i))\n");
-    printf("i = %d\n", i);
-    printf("Ép sang float: %f\n", (float)i);
-    printf("Ép ngược lại int: %d\n", (int)((float)i));
-    printf("Kết quả: %s\n", (i == (int)((float)i)) ? "true" : "false");
+    int i6 = i; float f6 = f;
+    printf("i = %d\n", i6);
+    printf("Ép sang float: %f\n", (float)i6);
+    printf("Ép ngược lại int: %d\n", (int)((float)i6));
+    printf("Kết quả: %s\n", (i6 == (int)((float)i6)) ? "true" : "false");
+    printf("Kết quả như ban đầu vì float có thể lưu chính xác số nguyên trong pham vi ± 2^24.\n");
 
     printf("\n---------------------------------------------------------------------------------------------\n");
 
     printf("\nCâu 7 if (i == (int)((double) i))\n");
-    printf("Ép sang double: %lf\n", (double)i);
-    printf("Ép ngược lại int: %d\n", (int)((double)i));
-    printf("Kết quả: %s\n", (i == (int)((double)i)) ? "true" : "false");
+    int i7 = i; float f7 = f;
+    printf("i = %d\n", i7);
+    printf("Ép sang double: %lf\n", (double)i7);
+    printf("Ép ngược lại int: %d\n", (int)((double)i7));
+    printf("Kết quả: %s\n", (i7 == (int)((double)i7)) ? "true" : "false");
+    printf("Kết quả như ban đầu vì double có thể lưu chính xác số nguyên trong pham vi ± 2^53.\n");
 
     printf("\n---------------------------------------------------------------------------------------------\n");
 
     printf("\nCâu 8 if (f == (float)((int) f))\n");
-    printf("f = %f\n", f);
-    printf("Ép sang int: %d\n", (int)f);
-    printf("Ép ngược lại float: %f\n", (float)((int)f));
-    printf("Kết quả: %s\n", (f == (float)((int)f)) ? "true" : "false");
+    int i8 = i; float f8 = f;
+    printf("f = %f\n", f8);
+    printf("Ép sang int: %d\n", (int)f8);
+    printf("Ép ngược lại float: %f\n", (float)((int)f8));
+    printf("Kết quả: %s\n", (f8 == (float)((int)f8)) ? "true" : "false");
+    printf("Kết quả không như ban đầu vì phần thập phân bị mất khi ép kiểu sang int.\n");
 
     printf("\n---------------------------------------------------------------------------------------------\n");
 
     printf("\nCâu 9 if (f == (double)((int) f))\n");
-    printf("f = %f\n", f);
-    printf("Ép sang int: %d\n", (int)f);
-    printf("Ép sang double: %lf\n", (double)((int)f));
-    printf("Kết quả: %s\n", (f == (double)((int)f)) ? "true" : "false");
+    int i9 = i; float f9 = f;
+    printf("f = %f\n", f9);
+    printf("Ép sang int: %d\n", (int)f9);
+    printf("Ép sang double: %lf\n", (double)((int)f9));
+    printf("Kết quả: %s\n", (f9 == (double)((int)f9)) ? "true" : "false");
+    printf("Kết quả không như ban đầu vì phần thập phân bị mất khi ép kiểu sang int.\n");
 
     return 0;
 }
